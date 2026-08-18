@@ -1,0 +1,12 @@
+# Ignore everything  by default
+*
+
+# Source
+!/config
+!/public
+!/packages
+!/templates
+
+# Composer
+!/composer.json
+!/composer.lock

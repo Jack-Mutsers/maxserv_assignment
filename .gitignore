@@ -1,0 +1,32 @@
+# Ignore everything by default
+*
+
+# Project files
+!/.gitignore
+!/README.md
+!/public
+!/public/index.php
+
+# Composer
+!/composer.json
+!/composer.lock
+
+# Docker
+!/Dockerfile
+!/docker-compose.yml
+!/.dockerignore
+
+# Configuration
+!/config
+!/config/*.yaml
+
+# Templates
+!/templates
+!/templates/**/*
+
+# Packages
+!/packages
+!/packages/core
+!/packages/core/**/*
+!/packages/app
+!/packages/app/**/*

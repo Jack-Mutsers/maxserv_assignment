@@ -1,0 +1,58 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  MaxServ\Core\:
+    resource: '../src/*'
+
+  Symfony\Component\Finder\:
+    resource: '../../../vendor/symfony/finder/*'
+
+  Symfony\Component\Routing\:
+    resource: '../../../vendor/symfony/routing/*'
+
+  Symfony\Component\Config\:
+    resource: '../../../vendor/symfony/config/*'
+
+  logger:
+    synthetic: true
+
+  Symfony\Component\Config\FileLocator:
+    arguments:
+      - [ '%application.root%' ]
+
+  Symfony\Component\Routing\Loader\YamlFileLoader:
+    arguments:
+      $locator: '@Symfony\Component\Config\FileLocator'
+
+  symfony.yaml_router:
+    class: Symfony\Component\Routing\Router
+    arguments:
+      $loader: '@Symfony\Component\Routing\Loader\YamlFileLoader'
+      $resource: 'config/routes.yaml'
+      $context: '@Symfony\Component\Routing\RequestContext'
+
+  MaxServ\Core\Routing\Router:
+    public: true
+    arguments:
+      $container: '@service_container'
+      $router: '@symfony.yaml_router'
+
+  MaxServ\Core\Database\Connection:
+    arguments:
+      $host: '%db.host%'
+      $user: '%db.user%'
+      $password: '%db.password%'
+      $database: '%db.database%'
+
+  Twig\Loader\FilesystemLoader:
+    class: 'Twig\Loader\FilesystemLoader'
+    arguments:
+      - '%application.root%/templates'
+
+  Twig\Environment:
+    class: 'Twig\Environment'
+    arguments:
+      - '@Twig\Loader\FilesystemLoader'
