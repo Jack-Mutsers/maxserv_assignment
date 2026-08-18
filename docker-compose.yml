@@ -35,7 +35,5 @@ services:
       - db
     ports:
       - "8080:80"
-    volumes:
-      - ./:/var/www/html
 volumes:
   mysql_data:

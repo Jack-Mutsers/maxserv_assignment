@@ -5,7 +5,10 @@
   "repositories": [
     {
       "type": "path",
-      "url": "packages/*"
+      "url": "packages/*",
+      "options": {
+        "symlink": false
+      }
     }
   ],
   "require": {
