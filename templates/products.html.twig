@@ -1,0 +1,15 @@
+{% for product in products %}
+    <div class="product">
+        <a href="/product/{{ product.sku|url_encode }}">
+            <h5>{{ product.title }}</h5>
+
+            <div class="imageContainer">
+                {% if product.thumbnail %}
+                    <img src="{{ product.thumbnail }}" alt="{{ product.title }}">
+                {% endif %}
+            </div>
+
+            <p>€{{ product.price|number_format(2, ',', '.') }}</p>
+        </a>
+    </div>
+{% endfor %}

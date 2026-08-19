@@ -4,7 +4,7 @@ index:
 
 products:
   path: /products
-  controller: MaxServ\App\Controller\IndexController::index
+  controller: MaxServ\App\Controller\IndexController::products
 
 product:
   path: /product/{id}

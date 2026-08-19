@@ -25,6 +25,11 @@
     "maxserv/app": "*",
     "maxserv/core": "*"
   },
+  "autoload": {
+      "files": [
+          "packages/app/helper/helper.php"
+      ]
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }

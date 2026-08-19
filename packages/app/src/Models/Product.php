@@ -49,7 +49,7 @@ class Product extends BaseModel
             stock INT,
             tags JSON,
             brand VARCHAR(255),
-            sku VARCHAR(255),
+            sku VARCHAR(255) unique,
             weight DECIMAL(10, 2),
             dimensions JSON,
             warrantyInformation TEXT,
@@ -149,18 +149,7 @@ class Product extends BaseModel
      */
     public function load(int $id): static
     {
-        $pdo = $this->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM {$this->table} WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-
-        $product = $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
-
-        if (!$product) {
-            return new static(); // Return an empty product if not found
-        }
-        
-        // load the product data into the model
-        $this->loadWithRecord($product);
+       parent::load($id);
 
         // load reviews for the product
         $reviewModel = new Review();
@@ -179,10 +168,13 @@ class Product extends BaseModel
     {
         $pdo = $this->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset");
-        $stmt->execute([
-            ':limit' => $limit,
-            ':offset' => ($page - 1) * $limit
-        ]);
+
+        $offset = ($page - 1) * $limit;
+
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+
+        $stmt->execute();
 
         $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
