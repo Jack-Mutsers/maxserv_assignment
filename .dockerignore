@@ -6,6 +6,7 @@
 !/public
 !/packages
 !/templates
+!/docker
 
 # Composer
 !/composer.json

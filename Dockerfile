@@ -20,6 +20,12 @@ FROM php:8.4.12-apache
 RUN docker-php-ext-install mysqli pdo pdo_mysql && \
     docker-php-ext-enable mysqli pdo pdo_mysql
 
+# Enable step debugging from the Docker container to the local IDE.
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
+
+COPY docker/xdebug.ini /usr/local/etc/php/conf.d/99-xdebug.ini
+
 WORKDIR /var/www/html
 COPY . ./
 COPY --from=dependencies /app/vendor ./vendor

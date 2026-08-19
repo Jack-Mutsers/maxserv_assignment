@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MaxServ\Core;
 
 use Exception;
+use MaxServ\Core\Database\Connection;
+use MaxServ\Core\Database\ConnectionProvider;
 use MaxServ\Core\Routing\Router;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,6 +34,10 @@ readonly class Bootstrap
         }
 
         $container->compile();
+
+        /** @var Connection $connection */
+        $connection = $container->get(Connection::class);
+        ConnectionProvider::setConnection($connection);
 
         /** @var Router $router */
         $router = $container->get(Router::class);
