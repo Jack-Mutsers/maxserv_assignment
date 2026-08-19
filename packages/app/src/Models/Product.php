@@ -164,7 +164,7 @@ class Product extends BaseModel
      * @param int $limit
      * @return array<int, static>
      */
-    public function getProducts(int $page = 1, int $limit = 15): array
+    public function getProducts(int $page = 1, int $limit = 16): array
     {
         $pdo = $this->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset");

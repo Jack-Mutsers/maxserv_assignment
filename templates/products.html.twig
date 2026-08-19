@@ -3,6 +3,10 @@
         <a href="/product/{{ product.sku|url_encode }}">
             <h5>{{ product.title }}</h5>
 
+            {% if product.brand %}
+                <p class="brand">{{ product.brand }}</p>
+            {% endif %}
+
             <div class="imageContainer">
                 {% if product.thumbnail %}
                     <img src="{{ product.thumbnail }}" alt="{{ product.title }}">
@@ -10,6 +14,13 @@
             </div>
 
             <p>€{{ product.price|number_format(2, ',', '.') }}</p>
+            {% if product.tags %}
+                <div class="tags">
+                    {% for tag in product.tags %}
+                        <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </a>
     </div>
 {% endfor %}

@@ -27,7 +27,7 @@ readonly class IndexController
     public function index(): void
     {
         $page = (int) resolvePost('page', 1);
-        $perPage = (int) resolvePost('perPage', 15);
+        $perPage = (int) resolvePost('perPage', 16);
 
         $productModel = new Product();
         $totalRecords = $productModel->getRecordCount();
@@ -54,7 +54,7 @@ readonly class IndexController
     public function products(bool $return = false, ?int $page = null, ?int $perPage = null): ?string
     {
         $page ??= (int) resolvePost('page', 1);
-        $perPage ??= (int) resolvePost('perPage', 15);
+        $perPage ??= (int) resolvePost('perPage', 16);
 
         $productModel = new Product();
         $products = $productModel->getProducts($page, $perPage);

@@ -4,9 +4,12 @@
 # Project files
 !/.gitignore
 !/README.md
-!/public
+
+!/public/
 !/public/index.php
 !/public/.htaccess
+!/public/assets/
+!/public/assets/**/*
 
 # Composer
 !/composer.json
