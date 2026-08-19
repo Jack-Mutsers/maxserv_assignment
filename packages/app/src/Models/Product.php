@@ -187,16 +187,14 @@ class Product extends BaseModel
 
     /**
      * Summary of getProducts
-     * @param int $page
+     * @param int $offset
      * @param int $limit
      * @return array<int, static>
      */
-    public function getProducts(int $page = 1, int $limit = 16): array
+    public function getProducts(int $offset = 0, int $limit = 16): array
     {
         $pdo = $this->getConnection();
         $stmt = $pdo->prepare("SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset");
-
-        $offset = ($page - 1) * $limit;
 
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);

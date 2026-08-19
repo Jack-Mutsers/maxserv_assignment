@@ -32,6 +32,46 @@ readonly class IndexController
     }
 
     /**
+     * Summary of datatable
+     * @return void
+     */
+    public function datatable(): void
+    {
+        $_POST;
+        $offset = (int) resolvePost('start ', 0);
+        $recordCount = (int) resolvePost('length', 10);
+
+        // TODO: implement search and order functionality
+
+        $productModel = new Product();
+        $records = $productModel->getProducts($offset, $recordCount);
+
+        $results = [
+            "recordsTotal" => $productModel->getRecordCount(),
+            "recordsFiltered" => $productModel->getRecordCount(),
+            "data" => []
+        ];
+        foreach ($records as $record) {
+            $row = [
+                'thumbnail' => "<img src='{$record->thumbnail}' alt='{$record->title}'>",
+                'title' => $record->title,
+                'price' => "&euro;" . number_format($record->price, 2, ',', '.'),
+                'brand' => $record->brand
+            ];
+
+            $tagHtml = '';
+            foreach ($record->tags as $tag) {
+                $tagHtml .= "<span class='tag'>{$tag}</span> ";
+            }
+
+            $row['tags'] = $tagHtml;
+            $results['data'][] = $row;
+        }
+
+        echo json_encode($results);
+    }
+
+    /**
      * load ecommerce products page
      * @throws RuntimeError
      * @throws SyntaxError
@@ -70,7 +110,7 @@ readonly class IndexController
         $perPage ??= (int) resolvePost('perPage', 16);
 
         $productModel = new Product();
-        $products = $productModel->getProducts($page, $perPage);
+        $products = $productModel->getProducts(($page -1) * $perPage, $perPage);
 
         $html = $this->templateRenderer->render('products.html.twig', [
             'products' => $products
