@@ -159,6 +159,33 @@ class Product extends BaseModel
     }
 
     /**
+     * load a product by its SKU and populate the properties of the Product model
+     * @param string $sku
+     * @return static
+     */
+    public function loadBySku(string $sku): static
+    {
+        $pdo = $this->getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM {$this->table} WHERE sku = :sku");
+        $stmt->execute([':sku' => $sku]);
+
+        $product = $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+
+        if (!$product) {
+            return new static(); // Return an empty product if not found
+        }
+        
+        // load the product data into the model
+        $this->loadWithRecord($product);
+
+        // load reviews for the product
+        $reviewModel = new Review();
+        $this->reviews = $reviewModel->getReviewsByProductId($product['id']);
+
+        return $this;
+    }
+
+    /**
      * Summary of getProducts
      * @param int $page
      * @param int $limit

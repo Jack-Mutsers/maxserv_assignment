@@ -71,6 +71,16 @@ readonly class IndexController
         return null;
     }
 
+    public function product(string $sku): void
+    {
+        $productModel = new Product();
+        $product = $productModel->loadBySku($sku);
+
+        echo $this->templateRenderer->render('product.html.twig', [
+            'product' => $product
+        ]);
+    }
+
     /**
      * Retrieve products from the API and insert them into the database (supposed to be run via cron job)
      * @param int $amount The number of products to retrieve

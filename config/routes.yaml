@@ -7,10 +7,10 @@ products:
   controller: MaxServ\App\Controller\IndexController::products
 
 product:
-  path: /product/{id}
+  path: /product/{sku}
   controller: MaxServ\App\Controller\IndexController::product
   requirements:
-    id: '\d+'
+    sku: '[a-zA-Z0-9-]+'
 
 retrieveApiProducts:
   path: /retrieve-api-products
