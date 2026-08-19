@@ -19,12 +19,25 @@ readonly class IndexController
     }
 
     /**
-     * load ecommerce products page
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
      */
     public function index(): void
+    {
+        // Your logic here
+        echo $this->templateRenderer->render('index.html.twig', [
+            'message' => 'Hello world!'
+        ]);
+    }
+
+    /**
+     * load ecommerce products page
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function ecommerce(): void
     {
         $page = (int) resolvePost('page', 1);
         $perPage = (int) resolvePost('perPage', 16);
@@ -34,7 +47,7 @@ readonly class IndexController
 
         $productsHtml = $this->products(true, $page, $perPage);
 
-        echo $this->templateRenderer->render('index.html.twig', [
+        echo $this->templateRenderer->render('ecommerce.html.twig', [
             'products' => $productsHtml,
             'currentPage' => $page,
             'totalPages' => max(1, (int) ceil($totalRecords / $perPage)),

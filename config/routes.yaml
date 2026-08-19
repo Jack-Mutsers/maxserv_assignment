@@ -2,6 +2,10 @@ index:
   path: /
   controller: MaxServ\App\Controller\IndexController::index
 
+ecommerce:
+  path: /ecommerce
+  controller: MaxServ\App\Controller\IndexController::ecommerce
+
 products:
   path: /products
   controller: MaxServ\App\Controller\IndexController::products
