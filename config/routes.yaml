@@ -1,3 +1,23 @@
 index:
   path: /
   controller: MaxServ\App\Controller\IndexController::index
+
+products:
+  path: /products
+  controller: MaxServ\App\Controller\IndexController::index
+
+product:
+  path: /product/{id}
+  controller: MaxServ\App\Controller\IndexController::product
+  requirements:
+    id: '\d+'
+
+retrieveApiProducts:
+  path: /retrieve-api-products
+  controller: MaxServ\App\Controller\IndexController::retrieveApiProducts
+
+retrieveApiProductsAmount:
+  path: /retrieve-api-products/{amount}
+  controller: MaxServ\App\Controller\IndexController::retrieveApiProducts
+  requirements:
+    amount: '\d+'

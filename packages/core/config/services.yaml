@@ -41,6 +41,7 @@ services:
       $router: '@symfony.yaml_router'
 
   MaxServ\Core\Database\Connection:
+    public: true
     arguments:
       $host: '%db.host%'
       $user: '%db.user%'
