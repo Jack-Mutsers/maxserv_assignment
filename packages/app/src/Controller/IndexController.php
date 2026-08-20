@@ -50,7 +50,7 @@ readonly class IndexController
         foreach ($records['data'] as $record) {
             $discountPercentage = max(0, min(100, $record->discountPercentage));
             $standardPrice = number_format($record->price, 2, ',', '.');
-            $discountedPrice = number_format($record->getDiscountedPrice($record->price, $discountPercentage), 2, ',', '.');
+            $discountedPrice = number_format($record->getDiscountedPrice(), 2, ',', '.');
 
             $row = [
                 'thumbnail' => "<img src='{$record->thumbnail}' alt='{$record->title}'>",

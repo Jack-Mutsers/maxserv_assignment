@@ -13,7 +13,16 @@
                 {% endif %}
             </div>
 
-            <p>&euro;{{ product.price|number_format(2, ',', '.') }}</p>
+            <p class="price">
+                {% if product.discountPercentage > 0 %}
+                    <span class="standard-price">&euro;{{ product.price|number_format(2, ',', '.') }}</span>
+                    <span class="discounted-price">&euro;{{ product.getDiscountedPrice()|number_format(2, ',', '.') }}</span>
+                    <span class="discount">{{ product.discountPercentage|number_format(0) }}% off</span>
+                {% else %}
+                    <span class="discounted-price">&euro;{{ product.price|number_format(2, ',', '.') }}</span>
+                {% endif %}
+            </p>
+
             {% if product.tags %}
                 <div class="tags">
                     {% for tag in product.tags %}
