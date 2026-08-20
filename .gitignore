@@ -20,6 +20,8 @@
 !/Dockerfile
 !/docker-compose.yml
 !/.dockerignore
+!/docker
+!/docker/xdebug.ini
 
 # Configuration
 !/config
