@@ -38,20 +38,17 @@ readonly class IndexController
     public function datatable(): void
     {
         $_POST;
-        $offset = (int) resolvePost('start ', 0);
+        $offset = (int) resolvePost('start', 0);
         $recordCount = (int) resolvePost('length', 10);
 
         // TODO: implement search and order functionality
 
         $productModel = new Product();
-        $records = $productModel->getProducts($offset, $recordCount);
+        $records = $productModel->getDatatable($offset, $recordCount);
 
-        $results = [
-            "recordsTotal" => $productModel->getRecordCount(),
-            "recordsFiltered" => $productModel->getRecordCount(),
-            "data" => []
-        ];
-        foreach ($records as $record) {
+        $results = $records;
+        $results['data'] = [];
+        foreach ($records['data'] as $record) {
             $row = [
                 'thumbnail' => "<img src='{$record->thumbnail}' alt='{$record->title}'>",
                 'title' => $record->title,

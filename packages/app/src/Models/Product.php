@@ -64,7 +64,7 @@ class Product extends BaseModel
     }
 
     /**
-     * Populate the properties of the Product model
+     * Convert the database record to the correct data format and populate the properties of the Product model
      * @param array $record
      * @return void
      */
@@ -212,5 +212,78 @@ class Product extends BaseModel
         }
 
         return $result;
+    }
+
+    /**
+     * Summary of getDatatable
+     * @param int $offset
+     * @param int $limit
+     * @return array[]|array{data: array<string, static>, recordsFiltered: int, recordsTotal: int}
+     */
+    public function getDatatable(int $offset = 0, int $limit = 16): array
+    {
+        $columns = $_POST['columns'] ?? [];
+
+        // Determine which columns are searchable and sortable
+        $searchableColumns = [];
+        $sortableColumns = [];
+        foreach ($columns as $column) {
+            if (isset($column['searchable']) && $column['searchable'] === 'true' && property_exists($this, $column['data'])) {
+                $searchableColumns[] = $column['data'];
+            }
+            if (isset($column['orderable']) && $column['orderable'] === 'true' && property_exists($this, $column['data'])) {
+                $sortableColumns[] = $column['data'];
+            }
+        }
+
+        // get the datatable order data from the POST request
+        $order = $_POST['order'] ?? [];
+        $orderColumn = ($order[0]['column'] ?? null) ?: 1;
+        $requestedOrderColumn = $columns[$orderColumn]['data'] ?? 'title';
+
+        // validate the requested order column against a list of allowed columns (for security reasons)
+        $orderColumnName = in_array($requestedOrderColumn, $sortableColumns, true)
+            ? $requestedOrderColumn
+            : 'title';
+        $orderDirection = strtoupper($order[0]['dir'] ?? 'ASC');
+        $orderDirection = in_array($orderDirection, ['ASC', 'DESC'], true) ? $orderDirection : 'ASC';
+
+        // get the search value from the POST request
+        $search = $_POST['search'] ?? [];
+        $searchValue = $search['value'] ?? '';
+
+        // get the total number of records and the filtered number of records
+        $results = [
+            "recordsTotal" => $this->getRecordCount(),
+            "recordsFiltered" => $this->getRecordCount($searchableColumns, $searchValue),
+            "data" => []
+        ];
+
+        // fetch the products from the database with the specified offset, limit, order, and search value
+        $sql = "SELECT * FROM {$this->table}";
+
+        $this->defineSearchConditions($sql, $searchableColumns, $searchValue);
+
+        $sql .= " ORDER BY {$orderColumnName} {$orderDirection} LIMIT :limit OFFSET :offset";
+
+        $pdo = $this->getConnection();
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // load the products into the results array
+        foreach ($products as $product) {
+            $productModel = new Product();
+            $productModel->loadWithRecord($product);
+
+            $results['data'][] = $productModel;
+        }
+
+        return $results;
     }
 }

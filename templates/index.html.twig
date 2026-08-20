@@ -34,13 +34,15 @@
                     url: '/datatable',
                     type: 'POST'
                 },
+                order: [[1, 'asc']],
                 columns: [
-                    { data: 'thumbnail', orderable: false },
-                    { data: 'title', orderable: true },
-                    { data: 'price', orderable: true },
-                    { data: 'brand', orderable: true },
-                    { data: 'tags', orderable: false },
+                    { data: 'thumbnail', orderable: false, searchable: false },
+                    { data: 'title', orderable: true, searchable: true },
+                    { data: 'price', orderable: true, searchable: true },
+                    { data: 'brand', orderable: true, searchable: true },
+                    { data: 'tags', orderable: false, searchable: true },
                 ],
+				"stateSave": true,
                 processing: true,
                 serverSide: true
             });

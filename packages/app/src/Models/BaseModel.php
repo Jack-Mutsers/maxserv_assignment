@@ -71,14 +71,47 @@ class BaseModel
 
     /**
      * get the total number of records in the table
+     * @param array $searchFields
+     * @param string $searchValue
      * @return int
      */
-    public function getRecordCount(): int
+    public function getRecordCount(array $searchFields = [], string $searchValue = ''): int
     {
+        $sql = "SELECT COUNT(*) as count FROM {$this->table}";
+
+        $this->defineSearchConditions($sql, $searchFields, $searchValue);
+
         $pdo = $this->getConnection();
-        $stmt = $pdo->query("SELECT COUNT(*) as count FROM {$this->table}");
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return (int)($result['count'] ?? 0);
+    }
+
+    /**
+     * Summary of defineSearchConditions
+     * @param string $sql
+     * @param array $searchFields
+     * @param string $searchValue
+     * @return void
+     */
+    protected function defineSearchConditions(string &$sql, array $searchFields, string $searchValue): void
+    {
+        if ($searchValue !== '') {
+            $searchValue = htmlspecialchars($searchValue, ENT_QUOTES, 'UTF-8'); // Sanitize the search value to prevent XSS attacks
+
+            $sql .= strpos($sql, 'WHERE') !== false
+                ? ' AND ('
+                : ' WHERE (';
+
+            $conditions = [];
+            foreach ($searchFields as $field) {
+                $conditions[] = "{$field} LIKE '%{$searchValue}%'";
+            }
+
+            $sql .= implode(' OR ', $conditions);
+            $sql .= ')';
+        }
     }
 }
