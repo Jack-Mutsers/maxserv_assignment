@@ -8,6 +8,7 @@
 !/public/
 !/public/index.php
 !/public/.htaccess
+!/public/favicon.ico
 !/public/assets/
 !/public/assets/**/*
 
