@@ -130,9 +130,18 @@ readonly class IndexController
     {
         $productModel = new Product();
         $product = $productModel->loadBySku($sku);
+        $productExists = isset($product->id) && is_numeric($product->id) && $product->id > 0;
+
+        if (!$productExists) {
+            http_response_code(404);
+        }
 
         echo $this->templateRenderer->render('product.html.twig', [
-            'product' => $product
+            'product' => $productExists ? $product : null,
+            'standardPrice' => $productExists ? $product->price : null,
+            'discountedPrice' => $productExists
+                ? $product->getDiscountedPrice()
+                : null,
         ]);
     }
 
