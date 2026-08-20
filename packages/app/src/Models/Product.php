@@ -286,4 +286,14 @@ class Product extends BaseModel
 
         return $results;
     }
+
+    /**
+     * Summary of getDiscountedPrice
+     * @return float|int
+     */
+    public function getDiscountedPrice(): float
+    {
+        $discountPercentage = max(0, min(100, $this->discountPercentage));
+        return $this->price * (1 - $discountPercentage / 100);
+    }
 }

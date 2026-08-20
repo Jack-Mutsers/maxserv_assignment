@@ -37,7 +37,6 @@ readonly class IndexController
      */
     public function datatable(): void
     {
-        $_POST;
         $offset = (int) resolvePost('start', 0);
         $recordCount = (int) resolvePost('length', 10);
 
@@ -49,10 +48,16 @@ readonly class IndexController
         $results = $records;
         $results['data'] = [];
         foreach ($records['data'] as $record) {
+            $discountPercentage = max(0, min(100, $record->discountPercentage));
+            $standardPrice = number_format($record->price, 2, ',', '.');
+            $discountedPrice = number_format($record->getDiscountedPrice($record->price, $discountPercentage), 2, ',', '.');
+
             $row = [
                 'thumbnail' => "<img src='{$record->thumbnail}' alt='{$record->title}'>",
-                'title' => $record->title,
-                'price' => "&euro;" . number_format($record->price, 2, ',', '.'),
+                'title' => "<a href='/product/{$record->sku}'>{$record->title}</a>",
+                'price' => $discountPercentage > 0
+                    ? "<span class='standard-price'>&euro;{$standardPrice}</span> <span class='discounted-price'>&euro;{$discountedPrice}</span>"
+                    : "<span class='discounted-price'>&euro;{$standardPrice}</span>",
                 'brand' => $record->brand
             ];
 

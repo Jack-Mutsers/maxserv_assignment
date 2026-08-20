@@ -6,3 +6,14 @@
   font-size: 0.75rem;
   line-height: 1.2;
 }
+
+.standard-price {
+  color: #6c757d;
+  margin-right: 0.35rem;
+  text-decoration: line-through;
+}
+
+.discounted-price {
+  color: #087f23;
+  font-weight: 700;
+}
