@@ -126,6 +126,11 @@ readonly class IndexController
         return null;
     }
 
+    /**
+     * Summary of product
+     * @param string $sku
+     * @return void
+     */
     public function product(string $sku): void
     {
         $productModel = new Product();
